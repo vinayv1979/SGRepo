@@ -1,9 +1,17 @@
 package com.sss.addresslookup.service;
 
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +24,8 @@ import com.sss.addresslookup.osma.pojo.OSMAResults;
 
 @Service
 public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
-
+	
+	  
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -26,19 +35,35 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 	 */
 	public Address osmaPostCodeSearch(String postCode)  {
 
-		final String uri = "http://demo7168884.mockable.io/addresslookup/";
+		//final String uri = "http://demo7168884.mockable.io/addresslookup/";
+		
+		final String uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode=postCode";
 
 		Address address = null;
 		OSMAResults osmaResults = null;
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+	
+		//Create and initialize the interceptor
+        final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+        interceptors.add( new BasicAuthorizationInterceptor( "osmab-socse-csc10", "Imeta6Ubun81" ) );
+        restTemplate.setInterceptors(interceptors);
+		
+		
 
 		// Define the param
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("postcode", postCode);
+		params.put("postCode", postCode);
 
-		RestTemplate restTemplate = new RestTemplate();
+		
+	   
+	
 
 		osmaResults = restTemplate.getForObject(uri, OSMAResults.class, params);
-
+		
+		
+		
 		ArrayList<Results> arrResult = transformAPISpecificObj(osmaResults);
 
 		if (arrResult.size() > 0) {
