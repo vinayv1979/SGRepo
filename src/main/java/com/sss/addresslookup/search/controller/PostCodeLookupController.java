@@ -24,12 +24,14 @@ public class PostCodeLookupController {
 	@Autowired
 	private AddressLookupSrvIntf addressLookupSrvIntf;
 
-	@RequestMapping(value = "/addresslookup/{postcode}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@RequestMapping(value = "/addresslookup/{postcode}", method = RequestMethod.GET, produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public @ResponseBody ResponseEntity<Object> postCodeLookup(@PathVariable String postcode) {
 
 		if (StringUtils.hasText(postcode) && postcode.length() != 0) {
+
 			
-			
+
 			Address address = addressLookupSrvIntf.osmaPostCodeSearch(postcode);
 
 			return new ResponseEntity<Object>(address, HttpStatus.OK);
@@ -49,7 +51,7 @@ public class PostCodeLookupController {
 		error.setMessage(ex.getMessage());
 		return new ResponseEntity<ErrorResponse>(error, HttpStatus.OK);
 	}
-	
+
 	@ExceptionHandler(AddressNotFoundException.class)
 	public ResponseEntity<ErrorResponse> exceptionHandler1(Exception ex) {
 		ErrorResponse error = new ErrorResponse();
@@ -58,5 +60,6 @@ public class PostCodeLookupController {
 		return new ResponseEntity<ErrorResponse>(error, HttpStatus.OK);
 	}
 
+	
 
 }

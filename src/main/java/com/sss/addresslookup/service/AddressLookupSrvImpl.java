@@ -1,21 +1,17 @@
 package com.sss.addresslookup.service;
 
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import java.util.List;
+
+
+
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
+
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -62,8 +58,6 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).withRegion(Regions.EU_WEST_2).build();
 
-		// AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
-
 		DynamoDB dynamoDB = new DynamoDB(client);
 
 		Table table = dynamoDB.getTable("Config");
@@ -79,9 +73,8 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		restTemplate.setInterceptors(interceptors);
 
 		// Define the param
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("postCode", postCode);
-
+		// Map<String, String> params = new HashMap<String, String>();
+		// params.put("postCode", postCode);
 		// osmaResults = restTemplate.getForObject(uri, OSMAResults.class, params);
 
 		if (item.get("test").equals(false)) {
@@ -90,7 +83,7 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 			urlBuilder.append(item.get("prod-url").toString());
 			urlBuilder.append(item.get("auth").toString());
 			urlBuilder.append("/os/abpl/address?postcode=");
-			urlBuilder.append(postCode);
+			urlBuilder.append(formatPostCode(postCode));
 			urlBuilder.append("&fieldset=all");
 
 			uri = urlBuilder.toString();
@@ -158,6 +151,48 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 
 		}
 		return arrResult;
+
+	}
+
+	/**
+	 * @param postcode
+	 * @return
+	 */
+	private static String formatPostCode(String postcode) {
+
+		String t = postcode.replaceAll("([A-Z,1-9]{3})([A-Z,1-9]{3})", "$1 $2");
+		String finalStr = "";
+
+		String replaceStr = postcode.replaceAll("\\s+", "");
+	
+
+		if (replaceStr.length() == 5) {
+			String u = replaceStr.substring(0, 2) + ' ' + replaceStr.substring(2);
+			String v = new StringBuilder(replaceStr).insert(2, ' ').toString();
+			for (String w : java.util.Arrays.asList(replaceStr, t, u, v)) {
+				finalStr = w;
+			}
+
+		}
+
+		if (replaceStr.length() == 6) {
+			String u = replaceStr.substring(0, 3) + ' ' + replaceStr.substring(3);
+			String v = new StringBuilder(replaceStr).insert(3, ' ').toString();
+			for (String w : java.util.Arrays.asList(replaceStr, t, u, v)) {
+				finalStr = w;
+			}
+
+		}
+
+		if (replaceStr.length() == 7) {
+			String u = replaceStr.substring(0, 4) + ' ' + replaceStr.substring(4);
+			String v = new StringBuilder(replaceStr).insert(4, ' ').toString();
+			for (String w : java.util.Arrays.asList(replaceStr, t, u, v)) {
+				finalStr = w;
+			}
+
+		}
+		return finalStr;
 
 	}
 
