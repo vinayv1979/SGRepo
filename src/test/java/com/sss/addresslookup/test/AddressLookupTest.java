@@ -21,7 +21,7 @@ public class AddressLookupTest {
 	@Test
 	public void testLookup() {
 		
-		Address address= addressLookupSrvIntf.osmaPostCodeSearch("G3 8JF");
+		Address address= addressLookupSrvIntf.osmaPostCodeSearch("Eh546fp");
 		
 		System.out.println(address.getResults().size());
 		
