@@ -24,8 +24,7 @@ import com.sss.addresslookup.osma.pojo.OSMAResults;
 
 @Service
 public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
-	
-	  
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -33,37 +32,31 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 	 * com.sss.addresslookup.service.AddressLookupSrvIntf#osmaPostCodeSearch(java.
 	 * lang.String)
 	 */
-	public Address osmaPostCodeSearch(String postCode)  {
+	public Address osmaPostCodeSearch(String postCode) {
 
-		//final String uri = "http://demo7168884.mockable.io/addresslookup/";
-		
-		final String uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode=postCode";
+		// final String uri = "http://demo7168884.mockable.io/addresslookup/";
+
+		final String uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode="
+				+ postCode + "&fieldset=all";
 
 		Address address = null;
 		OSMAResults osmaResults = null;
-		
+
 		RestTemplate restTemplate = new RestTemplate();
-		
-	
-		//Create and initialize the interceptor
-        final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
-        interceptors.add( new BasicAuthorizationInterceptor( "osmab-socse-csc10", "Imeta6Ubun81" ) );
-        restTemplate.setInterceptors(interceptors);
-		
-		
+
+		// Create and initialize the interceptor
+		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+		interceptors.add(new BasicAuthorizationInterceptor("osmab-socse-csc10", "Imeta6Ubun81"));
+		restTemplate.setInterceptors(interceptors);
 
 		// Define the param
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("postCode", postCode);
 
-		
-	   
-	
+		// osmaResults = restTemplate.getForObject(uri, OSMAResults.class, params);
 
-		osmaResults = restTemplate.getForObject(uri, OSMAResults.class, params);
-		
-		
-		
+		osmaResults = restTemplate.getForObject(uri, OSMAResults.class);
+
 		ArrayList<Results> arrResult = transformAPISpecificObj(osmaResults);
 
 		if (arrResult.size() > 0) {
