@@ -15,6 +15,15 @@ import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.Table;
 import com.sss.addresslookup.api.pojo.Address;
 import com.sss.addresslookup.api.pojo.Results;
 
@@ -34,19 +43,38 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 	 */
 	public Address osmaPostCodeSearch(String postCode) {
 
+		String uri;
+
 		// final String uri = "http://demo7168884.mockable.io/addresslookup/";
 
-		final String uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode="
-				+ postCode + "&fieldset=all";
+		uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode=" + postCode
+				+ "&fieldset=all";
 
 		Address address = null;
 		OSMAResults osmaResults = null;
 
 		RestTemplate restTemplate = new RestTemplate();
 
+		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJENNSX3MFGERUTXQ",
+				"EbnfVoF2IyGfF6XW69w1ePIkw1TpZDbZiGjLemBU");
+		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
+				.withCredentials(new AWSStaticCredentialsProvider(creds)).withRegion(Regions.EU_WEST_2).build();
+
+		// AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+
+		DynamoDB dynamoDB = new DynamoDB(client);
+
+		Table table = dynamoDB.getTable("Config");
+
+		Item item = table.getItem("ID", "osma-prod");
+
 		// Create and initialize the interceptor
 		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
-		interceptors.add(new BasicAuthorizationInterceptor("osmab-socse-csc10", "Imeta6Ubun81"));
+		// interceptors.add(new BasicAuthorizationInterceptor("osmab-socse-csc10",
+		// "Imeta6Ubun81"));
+		interceptors
+				.add(new BasicAuthorizationInterceptor(item.get("username").toString(), item.get("pwd").toString()));
+
 		restTemplate.setInterceptors(interceptors);
 
 		// Define the param
