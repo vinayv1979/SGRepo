@@ -33,6 +33,8 @@ public class PostCodeLookupController {
 			
 
 			Address address = addressLookupSrvIntf.osmaPostCodeSearch(postcode);
+			
+		//Address address = addressLookupSrvIntf.test(postcode);
 
 			return new ResponseEntity<Object>(address, HttpStatus.OK);
 

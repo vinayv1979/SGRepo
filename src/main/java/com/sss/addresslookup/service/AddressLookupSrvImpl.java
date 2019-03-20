@@ -4,13 +4,10 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-
-
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -39,22 +36,19 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 	 */
 	public Address osmaPostCodeSearch(String postCode) {
 
-		// final String uri = "http://demo7168884.mockable.io/addresslookup/";
-
-		/*
-		 * String uri =
-		 * "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode="
-		 * + postCode + "&fieldset=all";
-		 */
-
 		Address address = null;
 		OSMAResults osmaResults = null;
 		String uri = "";
 
 		RestTemplate restTemplate = new RestTemplate();
-
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJENNSX3MFGERUTXQ",
-				"EbnfVoF2IyGfF6XW69w1ePIkw1TpZDbZiGjLemBU");
+		
+		//Don't change this - specific to SG AWS
+		//BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJENNSX3MFGERUTXQ", 
+		//		"EbnfVoF2IyGfF6XW69w1ePIkw1TpZDbZiGjLemBU");
+		
+         // Specific to Vinay AWS
+		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAINSUYVMQ2T7WAWLA",
+				"+Gp88LtvE4WljRqb2QDClBsqtBg/+wmHjbxzr6Bn");
 		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).withRegion(Regions.EU_WEST_2).build();
 
@@ -64,18 +58,12 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 
 		Item item = table.getItem("ID", "osma-prod");
 
-		// Create and initialize the interceptor
 		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
 
 		interceptors
 				.add(new BasicAuthorizationInterceptor(item.get("username").toString(), item.get("pwd").toString()));
 
 		restTemplate.setInterceptors(interceptors);
-
-		// Define the param
-		// Map<String, String> params = new HashMap<String, String>();
-		// params.put("postCode", postCode);
-		// osmaResults = restTemplate.getForObject(uri, OSMAResults.class, params);
 
 		if (item.get("test").equals(false)) {
 
@@ -102,7 +90,40 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		}
 		return address;
 	}
+	
+	/*
+	public Address osmaPostCodeSearch(String postCode) {
+		
+		 String uri =
+		 "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode="
+		  + formatPostCode(postCode) + "&fieldset=all";
 
+		Address address = null;
+		OSMAResults osmaResults = null;
+
+		RestTemplate restTemplate = new RestTemplate();
+		
+		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+
+		interceptors
+				.add(new BasicAuthorizationInterceptor("osmab-socse-csc10", "Imeta6Ubun81"));
+
+		restTemplate.setInterceptors(interceptors);
+
+	
+		osmaResults = restTemplate.getForObject(uri, OSMAResults.class);
+
+		ArrayList<Results> arrResult = transformAPISpecificObj(osmaResults);
+
+		if (arrResult.size() > 0) {
+			address = new Address();
+			address.setResults(arrResult);
+			address.setTotalResults(arrResult.size());
+		}
+		return address;
+	}
+	
+*/
 	/**
 	 * @param osmaResults
 	 * @return
@@ -164,7 +185,6 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		String finalStr = "";
 
 		String replaceStr = postcode.replaceAll("\\s+", "");
-	
 
 		if (replaceStr.length() == 5) {
 			String u = replaceStr.substring(0, 2) + ' ' + replaceStr.substring(2);
@@ -195,5 +215,4 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		return finalStr;
 
 	}
-
 }

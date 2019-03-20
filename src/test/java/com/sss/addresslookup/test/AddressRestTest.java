@@ -20,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.sss.addresslookup.search.controller.PostCodeLookupController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PostCodeLookupController.class })
+@ContextConfiguration(classes = { AppConfig.class })
 @WebAppConfiguration
 public class AddressRestTest {
 	
@@ -39,7 +39,7 @@ public class AddressRestTest {
     	 // build your expected results here 
         String url = "/1";
        
-        ResultActions result=mockMvc.perform(get("/addresslookup/"));
+        ResultActions result=mockMvc.perform(get("/addresslookup/G38JF"));
                 
         
         System.out.println(result);
