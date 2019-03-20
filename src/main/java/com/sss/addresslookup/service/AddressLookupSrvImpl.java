@@ -43,15 +43,14 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 	 */
 	public Address osmaPostCodeSearch(String postCode) {
 
-		String uri;
-
 		// final String uri = "http://demo7168884.mockable.io/addresslookup/";
 
-		uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode=" + postCode
-				+ "&fieldset=all";
+		/*String uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode="
+				+ postCode + "&fieldset=all";*/
 
 		Address address = null;
 		OSMAResults osmaResults = null;
+		String uri;
 
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -70,8 +69,7 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 
 		// Create and initialize the interceptor
 		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
-		// interceptors.add(new BasicAuthorizationInterceptor("osmab-socse-csc10",
-		// "Imeta6Ubun81"));
+
 		interceptors
 				.add(new BasicAuthorizationInterceptor(item.get("username").toString(), item.get("pwd").toString()));
 
@@ -82,6 +80,16 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		params.put("postCode", postCode);
 
 		// osmaResults = restTemplate.getForObject(uri, OSMAResults.class, params);
+
+		StringBuilder urlBuilder = new StringBuilder();
+		urlBuilder.append(item.get("url").toString());
+		urlBuilder.append(item.get("auth").toString());
+		urlBuilder.append("/os/abpl/address?postcode=");
+		urlBuilder.append(postCode);
+		urlBuilder.append("&fieldset=all");
+		
+		
+		uri= urlBuilder.toString();
 
 		osmaResults = restTemplate.getForObject(uri, OSMAResults.class);
 
