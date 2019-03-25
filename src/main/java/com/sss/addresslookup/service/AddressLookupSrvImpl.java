@@ -27,71 +27,8 @@ import com.sss.addresslookup.osma.pojo.OSMAResults;
 @Service
 public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sss.addresslookup.service.AddressLookupSrvIntf#osmaPostCodeSearch(java.
-	 * lang.String)
-	 */
-	public Address osmaPostCodeSearch(String postCode) {
-
-		Address address = null;
-		OSMAResults osmaResults = null;
-		String uri = "";
-
-		RestTemplate restTemplate = new RestTemplate();
-		
-		//Don't change this - specific to SG AWS
-		//BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJENNSX3MFGERUTXQ", 
-		//		"EbnfVoF2IyGfF6XW69w1ePIkw1TpZDbZiGjLemBU");
-		
-         // Specific to Vinay AWS
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAINSUYVMQ2T7WAWLA",
-				"+Gp88LtvE4WljRqb2QDClBsqtBg/+wmHjbxzr6Bn");
-		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-				.withCredentials(new AWSStaticCredentialsProvider(creds)).withRegion(Regions.EU_WEST_2).build();
-
-		DynamoDB dynamoDB = new DynamoDB(client);
-
-		Table table = dynamoDB.getTable("Config");
-
-		Item item = table.getItem("ID", "osma-prod");
-
-		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
-
-		interceptors
-				.add(new BasicAuthorizationInterceptor(item.get("username").toString(), item.get("pwd").toString()));
-
-		restTemplate.setInterceptors(interceptors);
-
-		if (item.get("test").equals(false)) {
-
-			StringBuilder urlBuilder = new StringBuilder();
-			urlBuilder.append(item.get("prod-url").toString());
-			urlBuilder.append(item.get("auth").toString());
-			urlBuilder.append("/os/abpl/address?postcode=");
-			urlBuilder.append(formatPostCode(postCode));
-			urlBuilder.append("&fieldset=all");
-
-			uri = urlBuilder.toString();
-		} else {
-			uri = item.get("test-url").toString();
-		}
-
-		osmaResults = restTemplate.getForObject(uri, OSMAResults.class);
-
-		ArrayList<Results> arrResult = transformAPISpecificObj(osmaResults);
-
-		if (arrResult.size() > 0) {
-			address = new Address();
-			address.setResults(arrResult);
-			address.setTotalResults(arrResult.size());
-		}
-		return address;
-	}
 	
-	/*
+
 	public Address osmaPostCodeSearch(String postCode) {
 		
 		 String uri =
@@ -123,7 +60,7 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		return address;
 	}
 	
-*/
+
 	/**
 	 * @param osmaResults
 	 * @return
