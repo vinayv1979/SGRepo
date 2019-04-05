@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>dep</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>${project.basedir}/target/classes</directory>
+			<outputDirectory>/</outputDirectory>
+
+			<excludes>
+				<exclude>*.xml</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/target/classes</directory>
+			<outputDirectory>/resources</outputDirectory>
+			<includes>
+				<include>*.xml</include>
+			</includes>
+			<excludes>
+				<exclude>*.yaml</exclude>
+				<exclude>*.class</exclude>
+				<exclude>*.xsd</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>*.yaml</include>
+			</includes>
+			<excludes>
+				<exclude>*.xml</exclude>
+				<exclude>*.class</exclude>
+				<exclude>*.xsd</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/target/lib</directory>
+			<outputDirectory>/lib</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/lib</outputDirectory>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+
+		<!-- <dependencySet> <outputDirectory>lib</outputDirectory> <unpack>false</unpack> 
+			<scope>runtime</scope> <includes> <include>junit:junit</include> </includes> 
+			</dependencySet> -->
+	</dependencySets>
+</assembly>

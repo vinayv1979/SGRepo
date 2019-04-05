@@ -1,0 +1,15 @@
+version: 0.0
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn test
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - mvn clean package
+artifacts:
+    files:
+        - target/osma-0.0.1-SNAPSHOT-dep.zip
+        - appspec.yaml
+        
