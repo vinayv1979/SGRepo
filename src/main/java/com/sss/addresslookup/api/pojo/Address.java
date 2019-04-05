@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address implements Serializable{
 	
+	
+	
 
 	/**
 	 * 
