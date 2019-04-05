@@ -10,6 +10,6 @@ phases:
       - mvn clean package
 artifacts:
     files:
-        - /target/osma-0.0.1-SNAPSHOT-dep.zip
+        - target/osma-0.0.1-SNAPSHOT-dep.zip
         - appspec.yaml
         
