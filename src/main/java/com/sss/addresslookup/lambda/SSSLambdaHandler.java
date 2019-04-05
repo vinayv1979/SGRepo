@@ -13,6 +13,8 @@ public class SSSLambdaHandler implements RequestHandler<AwsProxyRequest, AwsProx
 	SpringLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
 	boolean isinitialized = false;
 	
+	
+	
 
 	public AwsProxyResponse handleRequest(AwsProxyRequest awsProxyRequest, Context context) {
 		if (!isinitialized) {
