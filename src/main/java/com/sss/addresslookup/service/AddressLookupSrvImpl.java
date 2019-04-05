@@ -69,6 +69,8 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 
 		OSMAResult osmaResult;
 		Results results;
+		
+		StringBuilder builder;
 
 		ArrayList<Results> arrResult = null;
 
@@ -85,7 +87,23 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 					results.setCountry(osmaAddress.getCountry());
 					results.setPost_town(osmaAddress.getPost_town());
 					results.setAddress_org(osmaAddress.getLa_organisation());
-					results.setAddress_street(osmaAddress.getBuilding_number() + " " + osmaAddress.getThoroughfare());
+					
+					builder=new StringBuilder();
+					
+					if(osmaAddress.getSao_text()!=null && osmaAddress.getSao_text().length()>0) {
+						builder.append(osmaAddress.getSao_text()+", ");
+					}
+					
+					if(osmaAddress.getBuilding_number()!=null && osmaAddress.getBuilding_number().length()>0) {
+						builder.append(osmaAddress.getBuilding_number()+", ");
+					}
+					
+					if(osmaAddress.getThoroughfare()!=null && osmaAddress.getThoroughfare().length()>0) {
+						builder.append(osmaAddress.getThoroughfare());
+					}
+					
+					
+					results.setAddress_street(builder.toString());
 					results.setPostcode(osmaAddress.getPostcode());
 					results.setAddress_locality(osmaAddress.getLocality());
 
