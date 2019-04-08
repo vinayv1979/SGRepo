@@ -21,7 +21,7 @@ public class SSSLambdaHandler implements RequestHandler<AwsProxyRequest, AwsProx
 			isinitialized = true;
 			try {
 				XmlWebApplicationContext wc = new XmlWebApplicationContext();
-				wc.setConfigLocation("classpath:/resources/osma-applicationcontext.xml");
+				wc.setConfigLocation("classpath:/osma-applicationcontext.xml");
 				handler = SpringLambdaContainerHandler.getAwsProxyHandler(wc);
 			} catch (ContainerInitializationException e) {
 				e.printStackTrace();
