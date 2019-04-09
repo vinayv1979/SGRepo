@@ -23,18 +23,19 @@ public class Address implements Serializable {
 	@XmlElement(name = "results")
 	private ArrayList<Results> results;
 
-	public int getTotalResultsTest() {
-		return totalResultsTest;
-	}
-
-	public void setTotalResultsTest(int totalResultsTest) {
-		this.totalResultsTest = totalResultsTest;
-	}
 
 	@XmlElement(name = "totalResultsTest")
-	private int totalResultsTest;
+	private int totalResults;
 
 
+
+	public int getTotalResults() {
+		return totalResults;
+	}
+
+	public void setTotalResults(int totalResults) {
+		this.totalResults = totalResults;
+	}
 
 	public ArrayList<Results> getResults() {
 		return results;
