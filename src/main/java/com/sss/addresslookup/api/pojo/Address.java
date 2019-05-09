@@ -27,16 +27,16 @@ public class Address implements Serializable {
 	private ArrayList<Results> results;
 
 
-	public int getTotalResults123() {
-		return totalResults123;
+	public int getTotalResults1234567() {
+		return totalResults1234567;
 	}
 
-	public void setTotalResults123(int totalResults123) {
-		this.totalResults123 = totalResults123;
+	public void setTotalResults1234567(int totalResults1234567) {
+		this.totalResults1234567 = totalResults1234567;
 	}
 
-	@XmlElement(name = "totalResultsTest123")
-	private int totalResults123;
+	@XmlElement(name = "totalResultsTest1234567")
+	private int totalResults1234567;
 
 
 

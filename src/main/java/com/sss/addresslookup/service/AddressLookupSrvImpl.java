@@ -49,7 +49,7 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		if (arrResult.size() > 0) {
 			address = new Address();
 			address.setResults(arrResult);
-			address.setTotalResults123(arrResult.size());
+			address.setTotalResults1234567(arrResult.size());
 		}
 		return address;
 	}
