@@ -49,7 +49,7 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		if (arrResult.size() > 0) {
 			address = new Address();
 			address.setResults(arrResult);
-			address.setTotalResults1234567(arrResult.size());
+			address.setTotalResults(arrResult.size());
 		}
 		return address;
 	}
@@ -89,7 +89,13 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 					}
 					
 					if(osmaAddress.getBuilding_number()!=null && osmaAddress.getBuilding_number().length()>0) {
-						builder.append(osmaAddress.getBuilding_number()+", ");
+						builder.append(osmaAddress.getBuilding_number()+" ");
+					} else {
+						
+						if(osmaAddress.getPao_start_number()!=null && osmaAddress.getPao_start_number().length()>0) {
+							builder.append(osmaAddress.getPao_start_number()+" ");
+						}
+						
 					}
 					
 					if(osmaAddress.getThoroughfare()!=null && osmaAddress.getThoroughfare().length()>0) {
