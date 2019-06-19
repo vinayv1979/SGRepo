@@ -9,8 +9,6 @@ import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-
-
 import com.sss.addresslookup.api.pojo.Address;
 import com.sss.addresslookup.api.pojo.Results;
 
@@ -21,27 +19,22 @@ import com.sss.addresslookup.osma.pojo.OSMAResults;
 @Service
 public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 
-	
-
 	public Address osmaPostCodeSearch(String postCode) {
-		
-		 String uri =
-		 "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode="
-		  + formatPostCode(postCode) + "&fieldset=all";
+
+		String uri = "https://api.publicsectormapping.gov.scot/osmab-socse-csc10-baa02/os/abpl/address?postcode="
+				+ formatPostCode(postCode) + "&fieldset=all";
 
 		Address address = null;
 		OSMAResults osmaResults = null;
 
 		RestTemplate restTemplate = new RestTemplate();
-		
+
 		final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
 
-		interceptors
-				.add(new BasicAuthorizationInterceptor("osmab-socse-csc10", "Imeta6Ubun81"));
+		interceptors.add(new BasicAuthorizationInterceptor("osmab-socse-csc10", "Imeta6Ubun81"));
 
 		restTemplate.setInterceptors(interceptors);
 
-	
 		osmaResults = restTemplate.getForObject(uri, OSMAResults.class);
 
 		ArrayList<Results> arrResult = transformAPISpecificObj(osmaResults);
@@ -53,7 +46,6 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 		}
 		return address;
 	}
-	
 
 	/**
 	 * @param osmaResults
@@ -63,7 +55,7 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 
 		OSMAResult osmaResult;
 		Results results;
-		
+
 		StringBuilder builder;
 
 		ArrayList<Results> arrResult = null;
@@ -81,28 +73,31 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 					results.setCountry(osmaAddress.getCountry());
 					results.setPost_town(osmaAddress.getPost_town());
 					results.setAddress_org(osmaAddress.getLa_organisation());
-					
-					builder=new StringBuilder();
-					
-					if(osmaAddress.getSao_text()!=null && osmaAddress.getSao_text().length()>0) {
-						builder.append(osmaAddress.getSao_text()+", ");
-					}
-					
-					if(osmaAddress.getBuilding_number()!=null && osmaAddress.getBuilding_number().length()>0) {
-						builder.append(osmaAddress.getBuilding_number()+" ");
-					} else {
-						
-						if(osmaAddress.getPao_start_number()!=null && osmaAddress.getPao_start_number().length()>0) {
-							builder.append(osmaAddress.getPao_start_number()+" ");
+
+					builder = new StringBuilder();
+
+					if (osmaAddress.getLa_organisation().isEmpty()) {
+						if (osmaAddress.getSao_text() != null && osmaAddress.getSao_text().length() > 0) {
+							builder.append(osmaAddress.getSao_text() + ", ");
 						}
-						
+
 					}
-					
-					if(osmaAddress.getThoroughfare()!=null && osmaAddress.getThoroughfare().length()>0) {
+
+					if (osmaAddress.getBuilding_number() != null && osmaAddress.getBuilding_number().length() > 0) {
+						builder.append(osmaAddress.getBuilding_number() + " ");
+					} else {
+
+						if (osmaAddress.getPao_start_number() != null
+								&& osmaAddress.getPao_start_number().length() > 0) {
+							builder.append(osmaAddress.getPao_start_number() + " ");
+						}
+
+					}
+
+					if (osmaAddress.getThoroughfare() != null && osmaAddress.getThoroughfare().length() > 0) {
 						builder.append(osmaAddress.getThoroughfare());
 					}
-					
-					
+
 					results.setAddress_street(builder.toString());
 					results.setPostcode(osmaAddress.getPostcode());
 					results.setAddress_locality(osmaAddress.getLocality());
