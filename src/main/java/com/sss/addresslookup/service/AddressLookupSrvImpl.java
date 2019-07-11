@@ -72,15 +72,22 @@ public class AddressLookupSrvImpl implements AddressLookupSrvIntf {
 					results = new Results();
 					results.setCountry(osmaAddress.getCountry());
 					results.setPost_town(osmaAddress.getPost_town());
-					results.setAddress_org(osmaAddress.getLa_organisation());
+					
+				
+					if(osmaAddress.getLa_organisation().isEmpty()) {
+							results.setAddress_org(osmaAddress.getRm_organisation_name());
+						
+					} else {
+						results.setAddress_org(osmaAddress.getLa_organisation());
+					}
 
+					
 					builder = new StringBuilder();
 
 					if (osmaAddress.getLa_organisation().isEmpty()) {
 						if (osmaAddress.getSao_text() != null && osmaAddress.getSao_text().length() > 0) {
 							builder.append(osmaAddress.getSao_text() + ", ");
 						}
-
 					}
 
 					if (osmaAddress.getBuilding_number() != null && osmaAddress.getBuilding_number().length() > 0) {
