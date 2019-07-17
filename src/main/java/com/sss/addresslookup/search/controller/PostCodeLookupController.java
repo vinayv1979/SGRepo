@@ -28,13 +28,11 @@ public class PostCodeLookupController {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public @ResponseBody ResponseEntity<Object> postCodeLookup(@PathVariable String postcode) {
 
-		if (StringUtils.hasText(postcode) && postcode.length() != 0) {
+		String pc = postcode.replaceAll("\\s", "");
 
-			String pc = postcode.replaceAll("\\s", "");
+		if (StringUtils.hasText(pc) && pc.length() != 0) {
 
 			Address address = addressLookupSrvIntf.osmaPostCodeSearch(pc);
-
-			// Address address = addressLookupSrvIntf.test(postcode);
 
 			return new ResponseEntity<Object>(address, HttpStatus.OK);
 
