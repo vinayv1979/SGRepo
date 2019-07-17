@@ -28,7 +28,11 @@ public class PostCodeLookupController {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public @ResponseBody ResponseEntity<Object> postCodeLookup(@PathVariable String postcode) {
 
+		System.out.println("postcode :"+ postcode);
+		
 		String pc = postcode.replaceAll("\\s", "");
+		
+		System.out.println("PC :"+ pc);
 
 		if (StringUtils.hasText(pc) && pc.length() != 0) {
 
