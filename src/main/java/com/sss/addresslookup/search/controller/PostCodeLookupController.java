@@ -30,11 +30,11 @@ public class PostCodeLookupController {
 
 		if (StringUtils.hasText(postcode) && postcode.length() != 0) {
 
-			
+			String pc = postcode.replaceAll("\\s", "");
 
-			Address address = addressLookupSrvIntf.osmaPostCodeSearch(postcode);
-			
-		//Address address = addressLookupSrvIntf.test(postcode);
+			Address address = addressLookupSrvIntf.osmaPostCodeSearch(pc);
+
+			// Address address = addressLookupSrvIntf.test(postcode);
 
 			return new ResponseEntity<Object>(address, HttpStatus.OK);
 
@@ -61,7 +61,5 @@ public class PostCodeLookupController {
 		error.setMessage(ex.getMessage());
 		return new ResponseEntity<ErrorResponse>(error, HttpStatus.OK);
 	}
-
-	
 
 }
