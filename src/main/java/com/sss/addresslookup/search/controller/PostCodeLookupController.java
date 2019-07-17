@@ -1,6 +1,6 @@
 package com.sss.addresslookup.search.controller;
 
-import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,9 +21,6 @@ import com.sss.addresslookup.service.AddressLookupSrvIntf;
 
 @RestController
 public class PostCodeLookupController {
-	
-	
-	private static final Logger logger = Logger.getLogger(PostCodeLookupController.class);
 
 	@Autowired
 	private AddressLookupSrvIntf addressLookupSrvIntf;
@@ -31,14 +28,8 @@ public class PostCodeLookupController {
 	@RequestMapping(value = "/addresslookup/{postcode}", method = RequestMethod.GET, produces = {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public @ResponseBody ResponseEntity<Object> postCodeLookup(@PathVariable String postcode) {
-		
-		logger.info("postcode :"+ postcode);
 
-		System.out.println("postcode :"+ postcode);
-		
 		String pc = postcode.replaceAll("\\s", "");
-		
-		logger.info("PC :"+ pc);
 
 		if (StringUtils.hasText(pc) && pc.length() != 0) {
 
